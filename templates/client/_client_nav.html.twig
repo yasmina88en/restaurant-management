@@ -1,0 +1,22 @@
+<header class="top-bar">
+    <div class="brand">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        <div>
+            <h2>Restaurant</h2>
+            <span>Online Ordering</span>
+        </div>
+    </div>
+
+    <a href="{{ path('cart_show') }}" class="logout">
+        🛒 Cart
+    </a>
+</header>
+
+<nav class="menu">
+    <a href="{{ path('client_menu') }}" class="{% if app.request.get('_route') == 'client_menu' %}active{% endif %}">
+        Menu
+    </a>
+    <a href="{{ path('cart_show') }}" class="{% if app.request.get('_route') == 'cart_show' %}active{% endif %}">
+        Cart
+    </a>
+</nav>

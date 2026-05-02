@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ dish.name }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=2">
+    <link rel="stylesheet" href="{{ asset('css/details.css') }}?v=2">
+{% endblock %}
+
+{% block body %}
+<header class="top-bar">
+    <div class="brand">
+         <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        <div>
+            <h2>Restaurant Admin</h2>
+            <span>Management System</span>
+        </div>
+    </div>
+    <a href="{{ path('app_login') }}" class="logout">Logout</a>
+</header>
+
+<nav class="menu">
+    <a href="{{ path('admin_dashboard') }}">Dashboard</a>
+    <a href="{{ path('category_index') }}">Categories</a>
+    <a href="{{ path('dish_index') }}" class="active">Dishes</a>
+    <a href="{{ path('admin_order_index')}}">Orders</a>
+</nav>
+
+<div class="container">
+    <div class="details-header">
+        <h1>Dish Details</h1>
+        <a href="{{ path('dish_index') }}" class="btn-back">← Back to Dishes</a>
+    </div>
+
+    <div class="details-card">
+        <div class="details-image">
+            {% if dish.image %}
+                <img src="{{ asset('images/' ~ dish.image) }}" alt="{{ dish.name }}">
+            {% else %}
+                <div class="no-image-big">No Image Available</div>
+            {% endif %}
+        </div>
+        
+        <div class="details-info">
+            <div class="info-row">
+                <span class="info-label">ID:</span>
+                <span class="info-value">{{ dish.id }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Name:</span>
+                <span class="info-value">{{ dish.name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Price:</span>
+                <span class="info-value">${{ dish.price }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Category:</span>
+                <span class="info-value">{{ dish.category ? dish.category.name : 'No category' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Description:</span>
+                <span class="info-value">{{ dish.description }}</span>
+            </div>
+            
+            <div class="details-actions">
+                <a href="{{ path('dish_edit', {'id': dish.id}) }}" class="btn-edit-full">Edit Dish</a>
+                <button onclick="openDeleteModal()" class="btn-delete-full">Delete Dish</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de suppression -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>Confirm Delete</h3>
+        <p>Are you sure you want to delete <strong>{{ dish.name }}</strong>?</p>
+        <div class="modal-actions">
+            <button onclick="closeDeleteModal()" class="btn-cancel">Cancel</button>
+            <form action="{{ path('dish_delete', {'id': dish.id}) }}" method="POST" style="display: inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dish.id) }}">
+                <button type="submit" class="btn-confirm-delete">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'flex';
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('deleteModal');
+    if (event.target == modal) {
+        closeDeleteModal();
+    }
+}
+</script>
+{% endblock %}

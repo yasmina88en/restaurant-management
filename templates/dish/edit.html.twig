@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Dish{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=2">
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}?v=2">
+{% endblock %}
+
+{% block body %}
+<header class="top-bar">
+    <div class="brand">
+         <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        <div>
+            <h2>Restaurant Admin</h2>
+            <span>Management System</span>
+        </div>
+    </div>
+    <a href="{{ path('app_login') }}" class="logout">Logout</a>
+</header>
+
+<nav class="menu">
+    <a href="{{ path('admin_dashboard') }}">Dashboard</a>
+    <a href="{{ path('category_index') }}">Categories</a>
+    <a href="{{ path('dish_index') }}" class="active">Dishes</a>
+    <a href="{{ path('admin_order_index')}}">Orders</a>
+</nav>
+
+<div class="container">
+    <div class="form-header">
+        <h1>Edit Dish</h1>
+        <a href="{{ path('dish_index') }}" class="btn-back">← Back to Dishes</a>
+    </div>
+
+    <div class="form-container">
+        {{ form_start(form, {'attr': {'id': 'editForm', 'enctype': 'multipart/form-data', 'onsubmit': 'return confirmBeforeSubmit()'}}) }}
+            <div class="form-group">
+                {{ form_label(form.name, 'Dish Name') }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-input', 'placeholder': 'Enter dish name'}}) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.price, 'Price') }}
+                {{ form_widget(form.price, {'attr': {'class': 'form-input', 'placeholder': '0.00'}}) }}
+                {{ form_errors(form.price) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.category, 'Category') }}
+                {{ form_widget(form.category, {'attr': {'class': 'form-input'}}) }}
+                {{ form_errors(form.category) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.description, 'Description') }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-textarea', 'placeholder': 'Enter dish description'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            {% if dish.image %}
+            <div class="current-image">
+                <p>Current Image:</p>
+                <img src="{{ asset('images/' ~ dish.image) }}" alt="{{ dish.name }}">
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label>Change Image (optional)</label>
+                <div class="file-upload-box" onclick="document.getElementById('dish_image').click()">
+                    <span id="fileName">📁 Click here to choose a new image...</span>
+                </div>
+                {{ form_widget(form.image, {'attr': {'style': 'display:none', 'id': 'dish_image'}}) }}
+                {{ form_errors(form.image) }}
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ path('dish_index') }}" class="btn-cancel">Cancel</a>
+                {{ form_widget(form.save, {'attr': {'class': 'btn-save'}, 'label': 'Update Dish'}) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<!-- Modal de confirmation -->
+<div id="updateModal" class="modal">
+    <div class="modal-content">
+        <h3>Confirm Update</h3>
+        <p>Are you sure you want to update <strong>{{ dish.name }}</strong>?</p>
+        <div class="modal-actions">
+            <button type="button" onclick="closeUpdateModal()" class="btn-cancel">Cancel</button>
+            <button type="button" onclick="proceedUpdate()" class="btn-confirm">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let formSubmitAllowed = false;
+
+document.getElementById('dish_image').addEventListener('change', function(e) {
+    const fileName = document.getElementById('fileName');
+    if (this.files && this.files[0]) {
+        fileName.textContent = '✅ ' + this.files[0].name;
+        fileName.style.color = '#28a745';
+    } else {
+        fileName.textContent = '📁 Click here to choose a new image...';
+        fileName.style.color = '#666';
+    }
+});
+
+function confirmBeforeSubmit() {
+    if (formSubmitAllowed) {
+        return true;
+    }
+    
+    document.getElementById('updateModal').style.display = 'flex';
+    return false;
+}
+
+function closeUpdateModal() {
+    document.getElementById('updateModal').style.display = 'none';
+}
+
+function proceedUpdate() {
+    closeUpdateModal();
+    formSubmitAllowed = true;
+    document.getElementById('editForm').submit();
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('updateModal');
+    if (event.target == modal) {
+        closeUpdateModal();
+    }
+}
+</script>
+{% endblock %}

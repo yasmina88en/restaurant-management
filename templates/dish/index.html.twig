@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dishes{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=2">
+    <link rel="stylesheet" href="{{ asset('css/dishes.css') }}?v=2">
+{% endblock %}
+
+{% block body %}
+<header class="top-bar">
+    <div class="brand">
+         <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        <div>
+            <h2>Restaurant Admin</h2>
+            <span>Management System</span>
+        </div>
+    </div>
+    <a href="{{ path('app_login') }}" class="logout">Logout</a>
+</header>
+
+<nav class="menu">
+    <a href="{{ path('admin_dashboard') }}">Dashboard</a>
+    <a href="{{ path('category_index') }}">Categories</a>
+    <a href="{{ path('dish_index') }}" class="active">Dishes</a>
+    <a href="{{ path('admin_order_index')}}">Orders</a>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Dishes</h1>
+            <p>Manage your restaurant dishes</p>
+        </div>
+        <a href="{{ path('dish_new') }}" class="btn-add">+ Add Dish</a>
+    </div>
+
+    <div class="dish-grid">
+        {% for dish in dishes %}
+            <div class="dish-card">
+                <div class="card-image">
+                    {% if dish.image %}
+                        <img src="{{ asset('images/' ~ dish.image) }}" alt="{{ dish.name }}">
+                    {% else %}
+                        <div class="no-image">No Image</div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h3>{{ dish.name }}</h3>
+                    <p class="dish-price">${{ dish.price }}</p>
+                    <p class="dish-category">{{ dish.category ? dish.category.name : 'No category' }}</p>
+                    <div class="card-actions">
+                        <a href="{{ path('dish_show', {'id': dish.id}) }}" class="btn-details">
+                            👁 Details
+                        </a>
+                        <a href="{{ path('dish_edit', {'id': dish.id}) }}" class="btn-edit">✏️</a>
+                        <button class="btn-delete" onclick="openDeleteModal({{ dish.id }}, '{{ dish.name|escape('js') }}', '{{ csrf_token('delete' ~ dish.id) }}')">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal de suppression -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>Confirm Delete</h3>
+        <p>Are you sure you want to delete <strong id="dishName"></strong>?</p>
+        <div class="modal-actions">
+            <button onclick="closeDeleteModal()" class="btn-cancel">Cancel</button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="_token" id="deleteToken">
+                <button type="submit" class="btn-confirm-delete">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openDeleteModal(id, name, token) {
+    document.getElementById('deleteModal').style.display = 'flex';
+    document.getElementById('dishName').textContent = name;
+    document.getElementById('deleteForm').action = '/admin/dish/' + id + '/delete';
+    document.getElementById('deleteToken').value = token;
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('deleteModal');
+    if (event.target == modal) {
+        closeDeleteModal();
+    }
+}
+</script>
+{% endblock %}

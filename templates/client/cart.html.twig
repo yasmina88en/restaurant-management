@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('css/cart.css') }}?v=3">
+{% endblock %}
+
+{% block body %}
+{% include 'client/_client_nav.html.twig' %}
+
+<div class="dashboard-container">
+    <h1>Your Cart</h1>
+
+    {% if items is empty %}
+        <p>Your cart is empty.</p>
+    {% else %}
+
+        {% for item in items %}
+            <div class="card cart-item">
+
+                <h3>{{ item.dish.name }}</h3>
+                <p class="price">{{ item.dish.price }} $</p>
+
+                <div class="qty-actions">
+                    <a class="btn-qty" href="{{ path('cart_decrease', {id: item.dish.id}) }}">−</a>
+                    <span>{{ item.quantity }}</span>
+                    <a class="btn-qty" href="{{ path('cart_add', {id: item.dish.id}) }}">+</a>
+                </div>
+
+                <p class="subtotal"><strong>{{ item.subtotal }} $</strong></p>
+
+               <button class="btn-remove"
+        onclick="openModal({{ item.dish.id }})">
+    Remove
+</button>
+
+            </div>
+        {% endfor %}
+
+        <div class="cart-summary">
+            <h2>Total: {{ total }} $</h2>
+
+            <a href="{{ path('order_form') }}" class="btn-order">
+                Order Now
+            </a>
+        </div>
+
+    {% endif %}
+</div>
+<!-- Remove confirmation modal -->
+<div id="removeModal" class="modal">
+    <div class="modal-content">
+        <h3>Remove item</h3>
+        <p>Are you sure you want to remove this item from your cart?</p>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+            <a id="confirmRemove" href="#" class="btn-confirm">Yes, remove</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(dishId) {
+        const modal = document.getElementById('removeModal');
+        const confirmBtn = document.getElementById('confirmRemove');
+
+        confirmBtn.href = '/cart/remove/' + dishId;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('removeModal').style.display = 'none';
+    }
+</script>
+
+{% endblock %}

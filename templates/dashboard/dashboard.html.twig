@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=2">
+    <link rel="stylesheet" href="{{ asset('css/dashboard-charts.css') }}?v=2">
+{% endblock %}
+
+{% block body %}
+<header class="top-bar">
+    <div class="brand">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        <div>
+            <h2>Restaurant Admin</h2>
+            <span>Management System</span>
+        </div>
+    </div>
+    <a href="{{ path('app_logout') }}" class="logout">Logout</a>
+</header>
+
+<nav class="menu">
+    <a href="{{ path('admin_dashboard') }}" class="active">Dashboard</a>
+    <a href="{{ path('category_index') }}">Categories</a>
+    <a href="{{ path('dish_index') }}">Dishes</a>
+    <a href="{{ path('admin_order_index') }}">Orders</a>
+</nav>
+
+<div class="dashboard-container">
+    <h1>Dashboard</h1>
+    <p>Welcome to your restaurant management system</p>
+
+    <!-- Statistiques principales -->
+    <div class="stats">
+        <div class="card">
+            <h3>Total Categories</h3>
+            <span>{{ totalCategories }}</span>
+        </div>
+
+        <div class="card">
+            <h3>Total Dishes</h3>
+            <span>{{ totalDishes }}</span>
+        </div>
+
+        <div class="card">
+            <h3>Total Orders</h3>
+            <span>{{ totalOrders }}</span>
+        </div>
+
+        <div class="card">
+            <h3>Total Menu Value</h3>
+            <span>${{ totalRevenue|number_format(2) }}</span>
+        </div>
+    </div>
+
+    <!-- Statistiques secondaires -->
+    <div class="secondary-stats">
+        <div class="stat-box">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+                <h4>Average Order Value</h4>
+                <p>${{ avgOrderValue|number_format(2) }}</p>
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-icon">🍽️</div>
+            <div class="stat-info">
+                <h4>Average Dish Price</h4>
+                <p>${{ avgDishPrice|number_format(2) }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphiques -->
+    <div class="charts-section">
+        <!-- Plats par catégorie -->
+        <div class="chart-card">
+            <h2>Dishes per Category</h2>
+            <div class="bar-chart">
+                {% set maxCount = 0 %}
+                {% for item in dishesPerCategory %}
+                    {% if item.count > maxCount %}
+                        {% set maxCount = item.count %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for item in dishesPerCategory %}
+                    <div class="bar-item">
+                        <div class="bar-label">{{ item.name }}</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: {{ maxCount > 0 ? (item.count / maxCount * 100) : 0 }}%">
+                                <span class="bar-value">{{ item.count }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Top 5 plats -->
+        <div class="chart-card">
+            <h2>Top 5 Most Expensive Dishes</h2>
+            <div class="top-list">
+                {% for dish in topDishes %}
+                    <div class="top-item">
+                        <div class="top-rank">{{ loop.index }}</div>
+                        <div class="top-info">
+                            <h4>{{ dish.name }}</h4>
+                            <p>{{ dish.category ? dish.category.name : 'No category' }}</p>
+                        </div>
+                        <div class="top-price">${{ dish.price }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Dernières commandes -->
+    <div class="recent-orders">
+        <h2>Recent Orders</h2>
+        <div class="orders-table">
+            <div class="table-header">
+                <div>Order ID</div>
+                <div>Customer</div>
+                <div>Date</div>
+                <div>Total</div>
+                <div>Action</div>
+            </div>
+            {% for order in recentOrders %}
+                <div class="table-row">
+                    <div>#{{ order.id }}</div>
+                    <div>{{ order.customerName }}</div>
+                    <div>{{ order.createdAt|date('d/m/Y H:i') }}</div>
+                    <div class="order-total">${{ order.totalPrice }}</div>
+                    <div>
+                        <a href="{{ path('admin_order_show', {'id': order.id}) }}" class="btn-view-small">View</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-table">No orders yet</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

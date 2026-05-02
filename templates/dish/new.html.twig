@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Dish{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=2">
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}?v=2">
+{% endblock %}
+
+{% block body %}
+<header class="top-bar">
+    <div class="brand">
+         <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        <div>
+            <h2>Restaurant Admin</h2>
+            <span>Management System</span>
+        </div>
+    </div>
+    <a href="{{ path('app_login') }}" class="logout">Logout</a>
+</header>
+
+<nav class="menu">
+    <a href="{{ path('admin_dashboard') }}">Dashboard</a>
+    <a href="{{ path('category_index') }}">Categories</a>
+    <a href="{{ path('dish_index') }}" class="active">Dishes</a>
+    <a href="{{ path('admin_order_index')}}">Orders</a>
+</nav>
+
+<div class="container">
+    <div class="form-header">
+        <h1>Add New Dish</h1>
+        <a href="{{ path('dish_index') }}" class="btn-back">← Back to Dishes</a>
+    </div>
+
+    <div class="form-container">
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            <div class="form-group">
+                {{ form_label(form.name, 'Dish Name') }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-input', 'placeholder': 'Enter dish name'}}) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.price, 'Price') }}
+                {{ form_widget(form.price, {'attr': {'class': 'form-input', 'placeholder': '0.00'}}) }}
+                {{ form_errors(form.price) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.category, 'Category') }}
+                {{ form_widget(form.category, {'attr': {'class': 'form-input'}}) }}
+                {{ form_errors(form.category) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.description, 'Description') }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-textarea', 'placeholder': 'Enter dish description'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="form-group">
+                <label>Dish Image</label>
+                <div class="file-upload-box" onclick="document.getElementById('dish_image').click()">
+                    <span id="fileName">📁 Click here to choose an image...</span>
+                </div>
+                {{ form_widget(form.image, {'attr': {'style': 'display:none', 'id': 'dish_image'}}) }}
+                {{ form_errors(form.image) }}
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ path('dish_index') }}" class="btn-cancel">Cancel</a>
+                {{ form_widget(form.save, {'attr': {'class': 'btn-save'}, 'label': 'Save Dish'}) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<script>
+document.getElementById('dish_image').addEventListener('change', function(e) {
+    const fileName = document.getElementById('fileName');
+    if (this.files && this.files[0]) {
+        fileName.textContent = '✅ ' + this.files[0].name;
+        fileName.style.color = '#28a745';
+    } else {
+        fileName.textContent = '📁 Click here to choose an image...';
+        fileName.style.color = '#666';
+    }
+});
+</script>
+{% endblock %}

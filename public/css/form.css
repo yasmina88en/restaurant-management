@@ -1,0 +1,213 @@
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.form-header h1 {
+    font-size: 28px;
+    color: #c026d3;
+}
+
+.btn-back {
+    padding: 10px 20px;
+    background: #fdf1ff;
+    color: #c026d3;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.btn-back:hover {
+    background: #f5e6fa;
+}
+
+.form-container {
+    max-width: 600px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #c026d3;
+}
+
+.file-upload-box {
+    padding: 20px;
+    border: 2px dashed #ddd;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    background: #f9f9f9;
+    transition: all 0.2s;
+}
+
+.file-upload-box:hover {
+    border-color: #c026d3;
+    background: #fdf1ff;
+}
+
+.file-upload-box span {
+    color: #666;
+    font-size: 15px;
+    display: block;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 12px;
+    background: #f5f5f5;
+    color: #333;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background: #e0e0e0;
+}
+
+.btn-save {
+    flex: 1;
+    padding: 12px;
+    background: #c026d3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.btn-save:hover {
+    background: #a21caf;
+}
+
+.current-image {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 6px;
+}
+
+.current-image p {
+    margin: 0 0 10px 0;
+    font-weight: 500;
+    color: #666;
+}
+
+.current-image img {
+    max-width: 200px;
+    border-radius: 6px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-content h3 {
+    margin: 0 0 15px 0;
+    font-size: 22px;
+}
+
+.modal-content p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-confirm {
+    background: #c026d3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-confirm:hover {
+    background: #a21caf;
+}
+
+.form-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
+
+.form-group ul li {
+    color: #a21caf;
+    font-size: 14px;
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #c026d3;
+}
+
+.form-error {
+    color: #a21caf;
+    font-size: 14px;
+    margin-top: 5px;
+}

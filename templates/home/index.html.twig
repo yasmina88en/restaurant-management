@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Restaurant Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}?v=4">
+{% endblock %}
+
+{% block body %}
+<div class="page">
+
+    <h1 class="title">Restaurant </h1>
+    <p class="subtitle">Chose your profil</p>
+
+    <div class="cards">
+
+        <!-- ADMIN CARD -->
+        <div class="card admin">
+            <div class="icon">🛡️</div>
+            <h2>Restaurant Manager</h2>
+            <p>Manage your dishes and orders</p>
+            <a href="{{ path('app_login') }}" class="link">
+               Access the administration panel →
+            </a>
+        </div>
+
+        <!-- CLIENT CARD -->
+        <div class="card client">
+            <div class="icon">🛒</div>
+            <h2>Client</h2>
+            <p>Order your favorite dishes online</p>
+            <a href="{{ path('client_menu') }}" class="link">
+                discover the menu →
+            </a>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

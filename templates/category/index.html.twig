@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=2">
+    <link rel="stylesheet" href="{{ asset('css/categories.css') }}?v=2">
+{% endblock %}
+
+{% block body %}
+<header class="top-bar">
+    <div class="brand">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        <div>
+            <h2>Restaurant Admin</h2>
+            <span>Management System</span>
+        </div>
+    </div>
+    <a href="{{ path('app_login') }}" class="logout">Logout</a>
+</header>
+
+<nav class="menu">
+    <a href="{{ path('admin_dashboard') }}">Dashboard</a>
+    <a href="{{ path('category_index') }}" class="active">Categories</a>
+    <a href="{{ path('dish_index') }}">Dishes</a> 
+    <a href="{{ path('admin_order_index')}}">Orders</a>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Categories</h1>
+            <p>Manage your restaurant categories</p>
+        </div>
+        <a href="{{ path('category_new') }}" class="btn-add">+ Add Category</a>
+    </div>
+
+    <div class="category-grid">
+        {% for category in categories %}
+            <div class="category-card">
+                <div class="card-image">
+                    {% if category.image %}
+                        <img src="{{ asset('images/' ~ category.image) }}" alt="{{ category.name }}">
+                    {% else %}
+                        <div class="no-image">No Image</div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h3>{{ category.name }}</h3>
+                    <div class="card-actions">
+                        <a href="{{ path('category_show', {'id': category.id}) }}" class="btn-details">
+                            👁 Details
+                        </a>
+                        <a href="{{ path('category_edit', {'id': category.id}) }}" class="btn-edit">✏️</a>
+                        <button class="btn-delete" onclick="openDeleteModal({{ category.id }}, '{{ category.name|escape('js') }}', '{{ csrf_token('delete' ~ category.id) }}')">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal de suppression -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>Confirm Delete</h3>
+        <p>Are you sure you want to delete <strong id="categoryName"></strong>?</p>
+        <div class="modal-actions">
+            <button onclick="closeDeleteModal()" class="btn-cancel">Cancel</button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="_token" id="deleteToken">
+                <button type="submit" class="btn-confirm-delete">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openDeleteModal(id, name, token) {
+    document.getElementById('deleteModal').style.display = 'flex';
+    document.getElementById('categoryName').textContent = name;
+    document.getElementById('deleteForm').action = '/admin/category/' + id + '/delete';
+    document.getElementById('deleteToken').value = token;
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('deleteModal');
+    if (event.target == modal) {
+        closeDeleteModal();
+    }
+}
+</script>
+{% endblock %}

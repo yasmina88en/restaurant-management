@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}?v=4">
+   
+
+{% endblock %}
+
+{% block body %}
+<div class="login-container">
+    <div class="login-card">
+
+        <div class="logo">
+            <img src="{{ asset('images/logo.png') }}" alt="Restaurant Logo">
+        </div>
+
+        <h1>Restaurant Admin</h1>
+        <p class="subtitle">Sign in to manage your restaurant</p>
+
+        {% if error %}
+            <div class="error">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <form method="post" action="{{ path('app_login') }}">
+
+            <label>Email</label>
+            <input
+                type="email"
+                name="email"
+                value="{{ last_username }}"
+                required
+            >
+
+            <label>Password</label>
+            <input
+                type="password"
+                name="password"
+                required
+            >
+
+            {# CSRF token obligatoire #}
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit">Sign In</button>
+        </form>
+
+
+    </div>
+</div>
+{% endblock %}
+
+
+

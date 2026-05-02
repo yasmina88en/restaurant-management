@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/form.css') }}?v=2">
+{% endblock %}
+
+{% block body %}
+{% include 'client/_client_nav.html.twig' %}
+<div class="container">
+
+ <div class="form-header">
+    <h1>Order Information</h1>
+    <a href="{{ path('cart_show') }}" class="btn-back">← Back to the cart</a>
+</div>
+
+
+    <form method="post" class="form-container">
+        <div class="form-group">
+            <label>Name</label>
+            <input name="name" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+            <label>Phone</label>
+            <input name="phone" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+            <label>Address</label>
+            <textarea name="address" class="form-textarea" required></textarea>
+        </div>
+
+        <button class="btn-save">Confirm Order</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('css/order-details.css') }}?v=2">
+{% endblock %}
+
+{% block body %}
+<header class="top-bar">
+    <div class="brand">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        <div>
+            <h2>Restaurant Admin</h2>
+            <span>Management System</span>
+        </div>
+    </div>
+    <a href="{{ path('app_logout') }}" class="logout">Logout</a>
+</header>
+
+<nav class="menu">
+    <a href="{{ path('admin_dashboard') }}">Dashboard</a>
+    <a href="{{ path('category_index') }}">Categories</a>
+    <a href="{{ path('dish_index') }}">Dishes</a>
+    <a href="{{ path('admin_order_index') }}" class="active">Orders</a>
+</nav>
+
+<div class="container">
+    <div class="header">
+        <h1>Order #{{ order.id }}</h1>
+        <a href="{{ path('admin_order_index') }}" class="btn-back">← Back</a>
+    </div>
+
+    <div class="details-box">
+        <h2>Customer Info</h2>
+        <p><strong>Name:</strong> {{ order.customerName }}</p>
+        <p><strong>Phone:</strong> {{ order.customerPhone }}</p>
+        <p><strong>Address:</strong> {{ order.customerAddress }}</p>
+        <p><strong>Date:</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
+    </div>
+
+    <div class="items-box">
+        <h2>Order Items</h2>
+        
+        {% for item in order.orderItems %}
+            <div class="item">
+                <div class="item-img">
+                    {% if item.dish.image %}
+                        <img src="{{ asset('images/' ~ item.dish.image) }}" alt="{{ item.dish.name }}">
+                    {% else %}
+                        <div class="no-img">No Image</div>
+                    {% endif %}
+                </div>
+                
+                <div class="item-info">
+                    <h3>{{ item.dish.name }}</h3>
+                    <p>{{ item.dish.description }}</p>
+                    <div class="item-details">
+                        <span>Price: ${{ item.price }}</span>
+                        <span>Qty: {{ item.quantity }}</span>
+                        <span class="subtotal">Subtotal: ${{ item.price * item.quantity }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="total-box">
+        <h2>Total: ${{ order.totalPrice }}</h2>
+    </div>
+</div>
+{% endblock %}

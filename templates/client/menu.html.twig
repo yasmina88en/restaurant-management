@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Menu{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('css/dishes.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('css/menu.css') }}?v=3">
+{% endblock %}
+
+{% block body %}
+{% include 'client/_client_nav.html.twig' %}
+
+<div class="container">
+    <h1>Our Menu</h1>
+
+    <!-- Categories -->
+    <div class="categories">
+        <a href="{{ path('client_menu') }}" class="cat-btn {% if not selected %}active{% endif %}">All</a>
+        {% for cat in categories %}
+            <a href="{{ path('client_menu', {'cat': cat.id}) }}" 
+               class="cat-btn {% if selected == cat.id %}active{% endif %}">
+                {{ cat.name }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <!-- Dishes -->
+    <div class="dish-grid">
+        {% for dish in dishes %}
+            <div class="dish-card">
+                <div class="card-image">
+                    {% if dish.image %}
+                        <img src="{{ asset('images/' ~ dish.image) }}" alt="{{ dish.name }}">
+                    {% else %}
+                        <div class="no-image">No Image</div>
+                    {% endif %}
+                </div>
+
+                <div class="card-body">
+                    <h3>{{ dish.name }}</h3>
+                    <p class="dish-price">${{ dish.price }}</p>
+                    <p>{{ dish.description }}</p>
+
+                    <form action="{{ path('cart_add', {id: dish.id}) }}" method="post">
+                        <button class="btn-add">Add to cart</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <p class="empty">No dishes in this category</p>
+        {% endfor %}
+    </div>
+
+    <a href="{{ path('cart_show') }}" class="btn-cart">View Cart</a>
+</div>
+{% endblock %}
