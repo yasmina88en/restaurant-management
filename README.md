@@ -34,7 +34,13 @@ Application web développée avec Symfony permettant la gestion complète d’un
 ---
 ## Screenshots
 ### Admin
+![Admin Dashboard](screenshots/admin/dashboard_admin.png)
+![Admin categories](screenshots/admin/categories.png)
+![Admin orders](screenshots/admin/orders.png)
+
 ### Client
+![Client menu](screenshots/client/Menu.png)
+![client cart](screenshots/client/cart.png)
 ##  Installation
 
 ```bash
